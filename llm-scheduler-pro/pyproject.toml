@@ -1,0 +1,108 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-scheduler-pro"
+version = "3.0.0"
+description = "Enterprise LLM Load Balancer with intelligent routing"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "LLM Scheduler Team", email = "team@example.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["llm", "load-balancer", "vllm", "openai", "gateway"]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "httpx>=0.26.0",
+    "tiktoken>=0.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "black>=24.1.0",
+    "isort>=5.13.0",
+    "mypy>=1.8.0",
+    "ruff>=0.1.0",
+]
+cli = [
+    "rich>=13.7.0",
+    "click>=8.1.0",
+]
+monitoring = [
+    "prometheus-client>=0.19.0",
+]
+all = [
+    "llm-scheduler-pro[dev,cli,monitoring]",
+]
+
+[project.scripts]
+llm-gateway = "gateway.app:main"
+llm-cli = "scripts.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/your-org/llm-scheduler-pro"
+Documentation = "https://github.com/your-org/llm-scheduler-pro#readme"
+Repository = "https://github.com/your-org/llm-scheduler-pro.git"
+Issues = "https://github.com/your-org/llm-scheduler-pro/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gateway*", "scripts*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "N", "W", "B", "C4", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["gateway"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

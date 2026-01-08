@@ -1,0 +1,41 @@
+# LLM Scheduler Pro - Prometheus 配置
+# Enterprise Edition v3.0
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  # ============================================================
+  # Prometheus 自身
+  # ============================================================
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # ============================================================
+  # LLM Gateway
+  # ============================================================
+  - job_name: 'llm-gateway'
+    static_configs:
+      - targets: ['gateway:9000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  # ============================================================
+  # vLLM Workers
+  # ============================================================
+  - job_name: 'vllm-workers'
+    static_configs:
+      - targets: 
+        - 'vllm-worker-1:8000'
+        - 'vllm-worker-2:8000'
+    metrics_path: '/metrics'
+    scrape_interval: 5s
